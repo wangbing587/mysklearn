@@ -1,0 +1,20 @@
+import numpy as np
+from sklearn.metrics import roc_curve, auc
+from sklearn.model_selection import StratifiedKFold
+import scipy as sp
+
+def calculate_auc(x, y, clf):
+    mean_tpr = 0.0
+    mean_fpr = np.linspace(0, 1, 100)
+    n_splits = 5
+    cv = StratifiedKFold(n_splits=n_splits, random_state=0)
+    for train_index, test_index in cv.split(x, y):
+        y_proba = clf.fit(x[train_index], y[train_index]).predict_proba(x[test_index])
+        fpr, tpr, thresholds = roc_curve(y[test_index], y_proba[:, 1])
+        mean_tpr += sp.interp(mean_fpr, fpr, tpr)
+        mean_tpr[0] = 0.0
+        roc_auc = auc(fpr, tpr)
+    mean_tpr = mean_tpr / n_splits
+    mean_tpr[-1] = 1.0
+    mean_auc = auc(mean_fpr, mean_tpr)
+    return mean_fpr, mean_tpr, mean_auc
