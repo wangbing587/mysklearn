@@ -21,3 +21,15 @@ def train(model, x, y, epochs=100, scale=True, n_splits=5):
             trainpred[val_index, i] = model.predict(x_val)
             trainprob[val_index, i] = model.predict_proba(x_val)[:, 1]
     return trainpred, trainprob
+
+
+
+clf = Pipeline([('std', StandardScaler()), 
+               ('nn',MLPClassifier(activation="relu",
+#                                        solver='lbfgs', 
+                                        # alpha=0.01, 
+                                        hidden_layer_sizes=(2000,500,100)))])
+
+n_splits = 5
+cv = StratifiedKFold(n_splits=n_splits,shuffle=True, random_state = 0)
+predictions = cross_val_predict(clf, x, y, cv=cv, n_jobs=-1)
