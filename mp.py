@@ -5,6 +5,7 @@ from sklearn.model_selection import KFold, RepeatedKFold, train_test_split, Stra
 from sklearn.metrics import classification_report, f1_score, confusion_matrix
 import warnings
 from pathos.multiprocessing import ProcessingPool as Pool
+# from multiprocessing import Pool
 from pathos.multiprocessing import cpu_count
 warnings.filterwarnings("ignore")
 from sklearn.svm import SVC
